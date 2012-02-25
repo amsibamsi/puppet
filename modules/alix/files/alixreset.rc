@@ -1,0 +1,54 @@
+#!/bin/sh
+#
+# Managed by Puppet
+#
+# PROVIDE: alixreset
+# REQUIRE: LOGIN
+
+. /etc/rc.subr
+
+name="alixreset"
+rcvar=${name}_enable
+
+load_rc_config ${name}
+
+: ${alixreset_enable:="NO"}
+
+start_cmd=${name}_start
+stop_cmd=${name}_stop
+
+running() {
+  /bin/pgrep -x alixswitch > /dev/null
+  return $?
+}
+
+alixreset_start() {
+  echo -n "Starting ALIX reset switch watcher:"
+  if running; then
+    echo " already running"
+    return 1
+  fi
+  /usr/local/sbin/alixreset > /dev/null 2>&1 &
+  if [ $? = 0 ]; then
+    echo "."
+  else
+    return 1
+  fi
+}
+
+alixreset_stop() {
+  echo -n "Stopping ALIX reset switch watcher:"
+  if running; then
+    pkill -x alixswitch > /dev/null
+    if [ $? = 0 ]; then
+      echo "."
+    else
+      return 1
+    fi
+  else
+    echo " not running"
+    return 1
+  fi
+}
+
+run_rc_command "$1"

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+/usr/local/sbin/alixswitch
+if [ $? = 0 ]; then
+  echo f2 > /dev/led/led1
+  echo f2 > /dev/led/led2
+  echo f2 > /dev/led/led3
+  /sbin/shutdown -r now "Reset button pressed"
+fi
