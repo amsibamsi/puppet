@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+# Managed by Puppet
+
+NOW=`date "+%M-%H-%d-%m-%u"`
+match=1
+
+echo
+echo "Checking for automatic shutdown:"
+
+<% autooff_schedules.each do |schedule| -%> 
+[[ $NOW =~ <%= schedule %> ]] && match=0
+<% end -%>
+
+if [ "$match" = 0 ]; then
+  echo "Reached shutdown time"
+else
+  echo "Out of schedule"
+  exit 0
+fi
+
+# Check uptime
+boottime=`sysctl -n kern.boottime | tr -s ',' ' ' | cut -d ' ' -f 4`
+now=`date -u +%s`
+uptime=$[now-boottime]
+if [ "$uptime" -lt 600 ]; then
+  echo "Minimum uptime not met"
+  exit 0
+fi
+
+# Check for logged in users
+users=`who | wc -l | tr -d " "`
+[ "$?" != 0 ] && exit 1
+if [ "$users" != 0 ]; then
+  echo "There are $users logged in users"
+  exit 0
+fi
+
+# Check for open tmux sessions
+pgrep tmux > /dev/null
+rc="$?"
+[ "$rc" -gt 1 ] && exit 1
+if [ "$rc" = 0 ]; then
+  echo "There are open tmux sessions"
+  exit 0
+fi
+
+# Check for running sftp servers
+pgrep sftp-server > /dev/null
+rc="$?"
+[ "$rc" -gt 1 ] && exit 1
+if [ "$rc" = 0 ]; then
+  echo "There are sftp servers running"
+  exit 0
+fi
+
+# Check for open samba connections
+which -a smbstatus
+if [ "$?" = 0 ]; then
+  connections=`smbstatus -S | tail -n +4 | grep -v '^[[:space:]]*$' | wc -l | tr -d ' '`
+  [ "$?" != 0 ] && exit 1
+  if [ "$connections" != 0 ]; then
+    echo "There are $connections open samba connections"
+    exit 0
+  fi
+fi
+
+shutdown -p now "Host is idle, time to go to bed"
