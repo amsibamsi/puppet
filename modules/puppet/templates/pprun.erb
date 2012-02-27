@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+puppet $* --detailed-exitcodes "<%= puppet_home %>/repo/manifests/site.pp"
+
+# Return error if puppet exit code contains bit 1 (could not execute)
+# or bit 3 (errors in catalog)
+[ $(($?&(1|4))) != 0 ] && exit 1
+
+touch "/usr/local/etc/puppet/lastrun" || exit 1

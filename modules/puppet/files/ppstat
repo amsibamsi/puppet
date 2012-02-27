@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+if [ -f /var/puppet/pp.lock ]; then
+  echo "Puppet is OFF"
+  exit 1
+else
+  echo "Puppet is on"
+  exit 0
+fi

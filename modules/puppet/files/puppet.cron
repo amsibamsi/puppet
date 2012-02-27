@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+echo
+echo "Running puppet:"
+
+if [ -f /var/puppet/pp.lock ]; then
+  echo "I'm locked; won't continue" >&2
+  exit 1
+fi
+
+if [ -f /var/run/puppet/pp.run ]; then
+  echo "I'm already running; won't continue" >&2
+  exit 1
+else
+  touch /var/run/puppet/pp.run || exit 1
+  trap "rm /var/run/puppet/pp.run" EXIT
+fi
+
+rc=0
+
+echo
+echo "Updating repository:"
+ppupdate || rc=1
+
+# Continue even when update failed
+
+echo
+echo "Running catalog:"
+pprun --color=false || rc=1
+
+exit $rc

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+[ -f /var/puppet/pp.lock ] && rm /var/puppet/pp.lock || true
