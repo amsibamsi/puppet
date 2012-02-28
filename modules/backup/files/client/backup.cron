@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+echo
+echo "Starting backup:"
+/usr/local/sbin/backup

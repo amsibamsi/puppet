@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# Managed by Puppet
+
+host=$1
+if [ -z "$host" ]; then
+  echo "Internal error: no host specified" >&2
+  exit 1
+fi
+if [ ! -d ~/$host ]; then
+  mkdir ~/$host || exit 1
+fi
+
+# Get the first word in the command
+cmd=${SSH_ORIGINAL_COMMAND%% *}
+
+case "$cmd" in
+
+  "put")
+    # Get everything after the first whitespace in the command
+    file=${SSH_ORIGINAL_COMMAND#* }
+
+    # Strip all slashes and double dots, so argument can't escape to another path
+    file=${file//\//}
+    file=${file//../}
+
+    # Strip blanks
+    file=${file// /}
+
+    if [ -z "$file" ]; then
+      echo "Missing filename" >&2
+      exit 1
+    fi
+    nice -n 19 cat - > ~/$host/$file.tmp || exit 1
+    mv ~/$host/$file.tmp ~/$host/$file || exit 1
+  ;;
+
+  "rsync")
+    if [ ! -d ~/$host/rsync ]; then
+      mkdir ~/$host/rsync || exit 1
+    fi
+    ~/.ssh/rrsync ~/$host/rsync || exit 1
+  ;;
+
+  "noop")
+    true
+  ;;
+
+  *)
+    echo "Unknown command: $cmd" >&2
+    exit 1
+  ;;
+
+esac

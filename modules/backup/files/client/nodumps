@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+CONFIG="/usr/local/etc/backup/conf"
+
+fail() {
+  rm $nodumps_file 2> /dev/null
+  exit 1
+}
+
+# Load configuration
+. "$CONFIG"
+if [ "$?" != 0 ]; then
+  echo "Config not found" >&2
+  exit 1
+fi
+
+# (Re)set nodump flags and at the same time
+# add them as excludes for old nodumps
+echo "Setting nodump flags:"
+for path in $nodumps; do
+  if [ -e $path ]; then
+    chflags nodump $path || fail
+    echo $path
+  fi
+  excludes="$excludes ! -path $path"
+done
+
+echo
+echo "Removing old nodump flags:"
+
+# Find old nodumps
+old_nodumps=`find / -flags nodump $excludes`
+[ "$?" = 0 ] || fail
+
+for path in $old_nodumps; do
+  chflags dump $path || fail
+  echo $path
+done
+
+touch $nodumps_file

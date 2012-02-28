@@ -1,0 +1,244 @@
+#!/usr/bin/env bash
+
+# Managed by Puppet
+
+CONFIG_DIR="/usr/local/etc/backup"
+CONFIG="$CONFIG_DIR/conf"
+FORCE=false
+NOW=`date -u +%s`
+COMPRESS="gzip -c"
+SSH_ARGS="\
+-T \
+-i /usr/local/etc/backup/key \
+-c arcfour128 \
+-o PreferredAuthentications=publickey \
+-o PubkeyAuthentication=yes \
+-o Compression=no \
+-o StrictHostKeyChecking=yes \
+-o UserKnownHostsFile=/etc/ssh/ssh_known_hosts \
+-o ConnectTimeout=5"
+RSYNC_ARGS="-a --delete"
+
+usage() {
+  echo "Usage: $0 [-f]"
+}
+
+# Return if any command in the last pipe command failed
+piperc() {
+  rcs=${PIPESTATUS[*]}
+  for rc in $rcs; do
+    [ "$rc" != 0 ] && return 1
+  done
+  return 0
+}
+
+# Parse command line arguments
+while getopts "f" opt; do
+  case $opt in
+    "f")
+      FORCE=true
+    ;;
+    "?")
+      echo "Invalid argument" >&2
+      usage
+      exit 1
+    ;;
+  esac
+done
+
+# Load configuration
+source "$CONFIG"
+if [ "$?" != 0 ]; then
+  echo "Config not found" >&2
+  exit 1
+fi
+
+# Check remote options
+if [ ! -z "$remote_host" ]; then
+  if [ -z "$remote_user" ]; then
+    echo "Remote user not set" >&2
+    exit 1
+  fi
+fi
+SSH_REMOTE="$remote_user@$remote_host"
+
+# Check if nodump flags are set
+if [ ! -f "$CONFIG_DIR/nodumps" ]; then
+  echo "nodump flags are not set" >&2
+  exit 1
+fi
+
+rc=0
+for fs in $filesystems; do
+  
+  # Using name indirection for filesystem specific config variables
+  # Filesystem specific values overwrite global values
+  # ${!_a:-$a} means: return value of variable with name $_a, if empty return $a
+  _path=${fs}_path; path=${!_path}
+  _backup_dir=${fs}_backup_dir; backup_dir=${!_backup_dir:-$backup_dir}
+  conf_dir=$path/.backup
+  _type=${fs}_type; type=${!_type:-$type}
+  _interval=${fs}_interval; interval=${!_interval:-$interval}
+  _rotations=${fs}_rotations; rotations=${!_rotations:-$rotations}
+  _levels=${fs}_levels; levels=${!_levels:-$levels}
+
+  # Only proceed if backup is forced or backup has expired
+  if [ -z "$interval" ]; then
+    echo "$fs: Missing interval" >&2
+    rc=1
+    continue
+  fi
+  if ! $FORCE; then
+    last=`cat $conf_dir/last 2> /dev/null`
+    [ -z "$last" ] && last=0
+    let age=$NOW-$last
+    if [ "$age" -lt "$interval" ]; then
+      echo "$fs: Skipping, not expired and not forced"
+      continue
+    fi
+  fi
+
+  # Path must be specified
+  if [ -z "$path" ]; then
+    echo "$fs: Missing path" >&2
+    rc=1
+    continue
+  fi
+
+  # Backup directory must be specified
+  if [ -z "$backup_dir" ]; then
+    echo "$fs: Missing backup directory" >&2
+    continue
+  fi
+
+  # Check backup type, and continue depending on type
+  if [ -z "$type" ]; then
+    echo "$fs: Missing type" >&2
+    rc=1
+    continue
+  fi
+
+  case $type in
+
+    "dump")
+
+      # Check mount
+      mount=`mount -p | egrep "[[:space:]]$path[[:space:]]"`
+      if [ -z "$mount" ]; then
+        echo "$fs: Not mounted" >&2
+        rc=1
+        continue
+      fi
+      dev=`echo $mount | cut -d ' ' -f 1`
+      if [ -z "$dev" ]; then
+        echo "$fs: Mount device not found" >&2
+        rc=1
+        continue
+      fi
+      fstype=`echo $mount | cut -d ' ' -f 3`
+      if [ -z "$fstype" ]; then
+        echo "$fs: Type not found" >&2
+        rc=1
+        continue
+      fi
+
+      # Set rotation and level of dump
+      old_level=`cat $conf_dir/level 2> /dev/null`
+      rotation=`cat $conf_dir/rotation 2> /dev/null`
+      if [ -z "$old_level" -o -z "$rotation" ]; then
+        level=0
+        let old_level=$levels-1
+        rotation=0
+      else
+        let level=($old_level+1)%$levels
+        [ "$level" = 0 ] && let rotation=($rotation+1)%$rotations
+      fi
+      dest="$fs.$rotation.$level"
+
+      # Dump filesystem
+      case $fstype in
+        
+        "ufs")
+          dump_args="-Lua -h 0 -$level -f - $path"
+          dest="$dest.ufs.z"
+          if [ -z "$remote_host" ]; then
+            dump $dump_args | $COMPRESS > $backup_dir/$dest.tmp && mv $backup_dir/$dest.tmp $backup_dir/$dest
+            piperc
+          else
+            ssh $SSH_ARGS $SSH_REMOTE ":" && \
+              dump $dump_args | $COMPRESS | ssh $SSH_ARGS $SSH_REMOTE "cat - > $backup_dir/$dest.tmp && mv $backup_dir/$dest.tmp $backup_dir/$dest"
+            piperc
+          fi
+        ;;
+    
+        "zfs")
+          dest="$dest.zfs.z"
+          # Store level in snapshot name, so backup knows last state if it was interrupted
+          zfs list -t snapshot ${dev}@backup.$old_level &> /dev/null
+          if [ "$?" = 0 ]; then
+            zfs destroy ${dev}@backup.old &> /dev/null
+            zfs rename ${dev}@backup.$old_level ${dev}@backup.old
+          fi
+          zfs destroy ${dev}@backup.$level &> /dev/null
+          zfs snapshot ${dev}@backup.$level
+          if [ "$level" = 0 ]; then
+            send="${dev}@backup.$level"
+          else
+            send="-i ${dev}@backup.old ${dev}@backup.$level"
+          fi
+          if [ -z "$remote_host" ]; then
+            zfs send $send | $COMPRESS > $backup_dir/$dest.tmp && mv $backup_dir/$dest.tmp $backup_dir/$dest
+            piperc
+          else
+            ssh $SSH_ARGS $SSH_REMOTE ":" && \
+              zfs send $send | $COMPRESS | ssh $SSH_ARGS $SSH_REMOTE "cat - > $backup_dir/$dest.tmp && mv $backup_dir/$dest.tmp $backup_dir/$dest"
+            piperc
+          fi
+        ;;
+
+        "*")
+          echo "$fs: Filesystem type not supported" >&2
+          rc=1
+          continue
+        ;;
+
+      esac
+    ;;
+
+    "rsync")
+      if [ -z "$remote_host" ]; then
+        if [ ! -d $backup_dir/rsync ]; then
+          mkdir $backup_dir/rsync
+        fi
+        rsync $RSYNC_ARGS $path/ $backup_dir/
+      else
+        ssh $SSH_ARGS $SSH_REMOTE ":" && \
+          rsync $RSYNC_ARGS -e "ssh $SSH_ARGS" $path/ $SSH_REMOTE:$backup_dir/
+      fi
+    ;;
+
+    "*")
+      echo "$fs: Backup type not supported" >&2
+      rc=1
+      continue
+    ;;
+
+  esac
+
+  # Update status
+  if [ "$?" = 0 ]; then
+    echo "$fs: Finished" 
+    [ -d $conf_dir ] || mkdir $conf_dir
+    echo $NOW > $conf_dir/last || rc=1
+    if [ $type = "dump" ]; then
+      echo $level > $conf_dir/level || rc=1
+      echo $rotation > $conf_dir/rotation || rc=1
+    fi
+  else
+    echo "$fs: Failed" >&2
+    rc=1
+  fi
+
+done
+
+exit $rc
