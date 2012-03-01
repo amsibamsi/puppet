@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+echo
+echo "Saving entropy:"
+
+su -m operator -c /usr/libexec/save-entropy

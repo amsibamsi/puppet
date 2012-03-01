@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+echo
+echo "Updating CMOS clock:"
+
+/sbin/adjkerntz -a

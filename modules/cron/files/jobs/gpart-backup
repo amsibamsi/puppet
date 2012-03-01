@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+echo
+echo "Backing up gpart information:"
+
+cd /var/backups || exit 1
+if [ -e gpart ]; then
+  mv gpart gpart.old || exit 1
+fi
+gpart show > gpart

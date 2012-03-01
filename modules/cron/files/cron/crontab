@@ -1,0 +1,14 @@
+# Managed by Puppet
+
+SHELL=/bin/sh
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+HOME=/var/log
+
+# Make sure that jobs from different lines run with an offset
+
+*/10 * * * * root periodic shortly
+3 * * * * root periodic hourly
+5 3 * * * root periodic daily
+7 3 * * * root periodic security
+35 3 * * 1 root periodic weekly
+5 4 2 * * root periodic monthly

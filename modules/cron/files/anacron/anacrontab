@@ -1,0 +1,8 @@
+# Managed by Puppet
+
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+
+1 5 daily periodic daily
+1 10 security periodic security
+7 15 weekly periodic weekly
+30 60 monthly periodic monthly

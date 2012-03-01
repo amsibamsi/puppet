@@ -1,0 +1,10 @@
+# Managed by Puppet
+
+web_root	/usr/local/share/mt-daapd/admin-root
+port 3689
+admin_pw 
+db_dir /var/db/mt-daapd
+mp3_dir <%= mp3_dir %>
+servername <%= hostname %> 
+runas daapd
+extensions .mp3,.MP3,.Mp3,.m4a,.m4p,.ogg
