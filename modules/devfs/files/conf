@@ -1,0 +1,5 @@
+# Managed by Puppet
+
+perm cd0 0660
+perm pass* 0660
+perm xpt0 0660

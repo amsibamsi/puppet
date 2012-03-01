@@ -1,0 +1,6 @@
+# Managed by Puppet
+
+# Prevent dhclient from touching resolv.conf
+add_new_resolv_conf() {
+  return 0
+}
