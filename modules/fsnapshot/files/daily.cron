@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+periodic-snapshot daily
