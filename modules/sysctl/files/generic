@@ -1,0 +1,3 @@
+
+# Generic options
+kern.coredump=0

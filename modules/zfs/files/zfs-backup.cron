@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+echo
+echo "Backing up zfs properties:"
+
+cd /var/backups || exit 1
+if [ -e zfs.props ]; then
+  mv zfs.props zfs.props.old || exit 1
+fi
+zfs list -o all > zfs.props

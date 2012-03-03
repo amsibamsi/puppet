@@ -1,0 +1,3 @@
+$HTTP["host"] =~ "<%= host %>" {
+  url.redirect = ( "^/(.*)" => "https://<%= host %>/$1" )
+}

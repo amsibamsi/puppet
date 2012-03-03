@@ -1,0 +1,6 @@
+
+ttyv0 "/usr/libexec/getty Pc" cons25 on secure
+ttyv1 "/usr/libexec/getty Pc" cons25 on secure
+ttyv2 "/usr/libexec/getty Pc" cons25 on secure
+ttyv3 "/usr/libexec/getty Pc" cons25 on secure
+ttyv4 "/usr/libexec/getty Pc" cons25 on secure

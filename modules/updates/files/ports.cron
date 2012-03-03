@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+echo
+echo "Outdated and erroneous packages:"
+n=`/usr/sbin/pkg_version -vL= | tee /dev/stderr | wc -l`
+[ "$n" -gt 0 ] && rc=1
+
+exit ${rc:-0}

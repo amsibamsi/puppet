@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+echo
+echo "Updating ports: "
+
+portsnap cron || exit 1
+if [ -e /usr/ports/.portsnap.INDEX ]; then
+  portsnap update || exit 1
+else
+  portsnap extract || exit 1
+fi

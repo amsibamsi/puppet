@@ -1,0 +1,5 @@
+# Managed by Puppet
+
+production:
+  adapter: sqlite3
+  dbfile: /var/db/redmine/sqlite.db

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+echo
+echo "Outdated packages:"
+export PACKAGESITE="<%= site %>"
+n=`/usr/local/sbin/pkg_upgrade -an | tee /dev/stderr | wc -l`
+[ "$n" -gt 0 ] && rc=1
+
+exit ${rc:-0}

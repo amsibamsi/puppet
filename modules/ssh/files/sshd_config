@@ -1,0 +1,6 @@
+# Managed by Puppet
+
+Protocol 2
+HostKey /etc/ssh/ssh_host_rsa_key
+PermitRootLogin no
+Subsystem sftp /usr/libexec/sftp-server

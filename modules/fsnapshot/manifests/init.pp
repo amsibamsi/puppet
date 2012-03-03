@@ -1,5 +1,7 @@
 class fsnapshot {
 
+  package { "freebsd-snapshot": }
+
   cron::job {
     "snapshot-hourly":
       source => "puppet:///modules/fsnapshot/hourly.cron",

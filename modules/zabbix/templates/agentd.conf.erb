@@ -1,0 +1,14 @@
+# Managed by Puppet
+
+Server=<%= server %>
+Hostname=<%= fqdn %>
+ListenIP=<%= listen %>
+ListenPort=10050
+StartAgents=1
+PidFile=/var/run/zabbix/agentd.pid
+# Comment to use syslog
+#LogFile=/var/log/zabbix/agentd.log
+#LogFileSize=10
+
+UserParameter=user.sysctl[*],/sbin/sysctl -n $1
+UserParameter=user.zpool[*],/sbin/zpool list -H -o $2 $1

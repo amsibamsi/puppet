@@ -1,0 +1,16 @@
+$HTTP["host"] =~ "<%= host %>" {
+  server.document-root = var.root + "zabbix"
+  fastcgi.server = (
+    ".php" => ( "zabbix" => (
+      "bin-path" => "/usr/local/bin/php-cgi -d memory_limit=256M -d max_execution_time=600 -d post_max_size=32M -d max_input_time=600 -d upload_max_filesize=16M",
+      "socket" => var.root + "sockets/php",
+      "max-procs" => "1",
+      # lighttpd has no dynamic forking for fcgi,
+      # so let php-cgi manage the processes
+      "bin-environment" => (
+        "PHP_FCGI_CHILDREN" => "1",
+        "PHP_FCGI_MAX_REQUESTS" => "500"
+      )
+    ))
+  )
+}

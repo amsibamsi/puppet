@@ -1,0 +1,22 @@
+# Managed by Puppet
+
+daemon_directory = /usr/local/libexec/postfix
+command_directory = /usr/local/sbin
+
+notify_classes = bounce, 2bounce, delay, policy, protocol, resource, software
+inet_interfaces = localhost
+mydestination = localhost <%= domain %> <%= fqdn %>
+mynetworks = localhost
+relayhost = <%= relay %>
+
+luser_relay = root
+alias_maps = hash:/usr/local/etc/postfix/aliases
+alias_database = hash:/usr/local/etc/postfix/aliases
+virtual_alias_maps = hash:/usr/local/etc/postfix/virtuals
+
+smtp_use_tls = yes
+smtp_tls_CAfile = /usr/local/share/certs/ca-root-nss.crt
+
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/usr/local/etc/postfix/sasl
+smtp_sasl_security_options = noanonymous

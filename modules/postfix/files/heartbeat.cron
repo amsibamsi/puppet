@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+date | mail -s "heartbeat `hostname -s`" root

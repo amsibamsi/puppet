@@ -1,0 +1,16 @@
+$HTTP["host"] =~ "<%= host %>" {
+  server.document-root = var.root + "redmine/public"
+  server.error-handler-404 = "redmine.fcgi"
+  index-file.names = ( "redmine.fcgi" )
+  fastcgi.server = (
+    "redmine.fcgi" => ( "redmine" => (
+      "bin-path" => var.root + "redmine/public/redmine.fcgi",
+      "socket" => var.root + "sockets/redmine",
+      "max-procs" => "1",
+      "check-local" => "disable",
+      "bin-environment" => (
+        "RAILS_ENV" => "production"
+      )
+    ))
+  )
+}

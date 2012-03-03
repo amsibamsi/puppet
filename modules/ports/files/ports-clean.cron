@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+echo
+echo 'Cleaning up ports tree:'
+/usr/local/sbin/portsclean -C -DD > /dev/null || exit 1

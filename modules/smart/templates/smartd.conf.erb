@@ -1,0 +1,5 @@
+# Managed by Puppet
+
+<% options.zip(devices) do |line| -%>
+<%= line.join(" ") %> -a -m root -M diminishing
+<% end -%>

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+echo
+echo "Starting S.M.A.R.T. long self tests:"
+
+rc=0
+
+<% options.zip(devices) do |line| -%>
+smartctl -t long <%= line.join(" ") %> || rc=1
+<% end -%>
+
+exit $rc
