@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+dir="/usr/local/etc/lighttpd"
+ssl="$dir/ssl.pem"
+ssl_old="$dir/ssl.pem.old"
+
+mode() {
+  chown root:www $1
+  chmod 0640 $1
+}
+
+if [ -f "$ssl" ]; then
+  mv $ssl $ssl_old
+  mode $ssl_old
+fi
+
+cat <%= scope.lookupvar('cert::key') %> <%= scope.lookupvar('cert::cert') %> > $ssl
+mode $ssl

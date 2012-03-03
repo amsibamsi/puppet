@@ -1,4 +1,4 @@
-class ssl(
+class cert(
   $dir = "/etc/ssl"
 ) {
 

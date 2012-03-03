@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Managed by Puppet
+
+echo
+echo "Dumping MySQL data:"
+export HOME="/root"
+/usr/local/bin/mysqldump --all-databases --flush-logs --lock-all-tables --socket=/var/tmp/mysql.sock > /var/backups/mysql || exit 1
+/usr/bin/gzip -f /var/backups/mysql || exit 1

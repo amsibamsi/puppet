@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# Managed by Puppet
+
+if [ -z "$1" -o -z "$2" ]; then
+  echo "Usage: $0 <user> <realm>" >&2
+  exit 1
+fi
+
+user=$1
+realm=$2
+
+read -p "Password:" -s pwd1
+echo >&2
+read -p "Repeat password:" -s pwd2
+echo >&2
+if [ "$pwd1" != "$pwd2" ]; then
+  echo "Passwords do not match!" >&2
+  exit 1
+fi
+hash=`echo -n "$user:$realm:$pwd1" | md5 | cut -b -32`
+echo "$user:$realm:$hash"

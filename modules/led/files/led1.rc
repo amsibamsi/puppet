@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# Managed by Puppet
+#
+# PROVIDE: led1
+# REQUIRE: devd
+# BEFORE: resolv
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name="led1"
+rcvar=led1_enable
+
+load_rc_config led1
+
+: ${led1_enable:="NO"}
+
+start_cmd=${name}_start
+stop_cmd=${name}_stop
+
+led1_start() {
+  echo -n "LED status startup:"
+  echo 1 > /dev/led/led1 || return 1
+  echo 1 > /dev/led/led2 || return 1
+	echo 0 > /dev/led/led3 || return 1
+  echo "."
+}
+
+led1_stop() {
+  echo -n "LED status reset:"
+  echo 1 > /dev/led/led1 || return 1
+  echo 0 > /dev/led/led2 || return 1
+	echo 0 > /dev/led/led3 || return 1
+  echo "."
+}
+
+run_rc_command "$1"

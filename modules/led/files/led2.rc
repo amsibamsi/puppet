@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# Managed by Puppet
+#
+# PROVIDE: led2
+# REQUIRE: LOGIN led1
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name="led2"
+rcvar=led2_enable
+
+load_rc_config led2
+
+: ${led2_enable:="NO"}
+
+start_cmd=${name}_start
+stop_cmd=${name}_stop
+
+led2_start() {
+  echo -n "LED status ready:"
+  echo 1 > /dev/led/led1 || return 1
+  echo 1 > /dev/led/led2 || return 1
+	echo 1 > /dev/led/led3 || return 1
+  echo "."
+}
+
+led2_stop() {
+  echo -n "LED status shutdown:"
+  echo 1 > /dev/led/led1 || return 1
+  echo 1 > /dev/led/led2 || return 1
+	echo 0 > /dev/led/led3 || return 1
+  echo "."
+}
+
+run_rc_command "$1"
