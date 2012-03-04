@@ -19,12 +19,12 @@ class cert(
       owner  => "root",
       group  => "0";
     $cert_dir:
-      ensure => directory;
+      ensure => directory,
       mode   => "0755",
       owner  => "root",
       group  => "0";
     $key_dir:
-      ensure => directory;
+      ensure => directory,
       mode   => "0700",
       owner  => "root",
       group  => "0";

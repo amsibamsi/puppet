@@ -9,7 +9,6 @@ class packages {
     "pkg_search",
     "bsdadminscripts",
     "rsync",
-    "pkg",
     "zsh",
     "tmux",
     "vim-lite",

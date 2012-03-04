@@ -1,6 +1,6 @@
 class puppet(
-  $puppet_home = '/srv/puppet',
-  $puppet_repo
+  $home = '/srv/puppet',
+  $repo
 ) {
 
   include git
@@ -8,11 +8,11 @@ class puppet(
   file {
     "/usr/local/etc/puppet/puppet.conf":
       content => template("puppet/puppet.conf.erb");
-    $puppet_home:
+    $home:
       group => "puppet",
       ensure => directory,
       mode => "0750";
-    "$puppet_home/key":
+    "$home/key":
       source => "puppet:///modules/site-puppet/key",
       owner => "0",
       group => "0",
@@ -20,7 +20,7 @@ class puppet(
     "/usr/local/sbin/ppssh":
       mode => "0755",
       content => template("puppet/ppssh.erb"),
-      require => File["$puppet_home/key"];
+      require => File["$home/key"];
     "/usr/local/sbin/ppupdate":
       mode => "0755",
       content => template("puppet/ppupdate.erb"),

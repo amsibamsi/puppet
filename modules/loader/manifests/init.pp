@@ -1,4 +1,4 @@
-class loader($options = []) {
+class loader {
 
   concatfile {
     "/boot/loader.conf":
@@ -12,12 +12,6 @@ class loader($options = []) {
     "options":
       source => "puppet:///modules/loader/options",
       order => "01";
-  }
-
-  loader::config {
-    "other":
-      content => template("loader/other.erb"),
-      order => "99";
   }
 
 }
