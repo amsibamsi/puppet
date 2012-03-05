@@ -2,7 +2,7 @@
 
 # Managed by Puppet
 
-puppet $* --detailed-exitcodes "<%= home %>/repo/manifests/site.pp"
+puppet apply $* --detailed-exitcodes "<%= home %>/repo/manifests/site.pp"
 
 # Return error if puppet exit code contains bit 1 (could not execute)
 # or bit 3 (errors in catalog)
