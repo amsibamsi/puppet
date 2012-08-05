@@ -29,7 +29,7 @@ class gitosis {
   # Package will create user as well if it's not yet there,
   # but we will force our own specs for it
   package {
-    "py26-gitosis":
+    "py27-gitosis":
       require => User["git"];
   }
 
