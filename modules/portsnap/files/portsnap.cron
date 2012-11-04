@@ -5,9 +5,18 @@
 echo
 echo "Updating ports: "
 
-portsnap cron || exit 1
+portsnap cron
+[ "$n" -gt 0 ] && rc=1
 if [ -e /usr/ports/.portsnap.INDEX ]; then
-  portsnap update || exit 1
+  portsnap update
 else
-  portsnap extract || exit 1
+  portsnap extract
 fi
+[ "$n" -gt 0 ] && rc=1
+
+if [ -x /usr/local/sbin/portsdb ]; then
+  portsdb -u
+  [ "$n" -gt 0 ] && rc=1
+fi
+
+exit ${rc:-0}
