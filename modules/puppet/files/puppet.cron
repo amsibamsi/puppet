@@ -5,17 +5,17 @@
 echo
 echo "Running puppet:"
 
-if [ -f /var/puppet/pp.lock ]; then
+if [ -f /var/run/pp.lock ]; then
   echo "I'm locked; won't continue" >&2
   exit 1
 fi
 
-if [ -f /var/run/puppet/pp.run ]; then
+if [ -f /var/run/pp.run ]; then
   echo "I'm already running; won't continue" >&2
   exit 1
 else
-  touch /var/run/puppet/pp.run || exit 1
-  trap "rm /var/run/puppet/pp.run" EXIT
+  touch /var/run/pp.run || exit 1
+  trap "rm /var/run/pp.run" EXIT
 fi
 
 rc=0

@@ -2,7 +2,7 @@
 
 # Managed by Puppet
 
-if [ -f /var/puppet/pp.lock ]; then
+if [ -f /var/run/pp.lock ]; then
   echo "Puppet is OFF"
   exit 1
 else

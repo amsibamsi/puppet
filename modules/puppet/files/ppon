@@ -2,4 +2,4 @@
 
 # Managed by Puppet
 
-[ -f /var/puppet/pp.lock ] && rm /var/puppet/pp.lock || true
+[ -f /var/run/pp.lock ] && rm /var/run/pp.lock || true

@@ -2,9 +2,9 @@
 
 # Managed by Puppet
 
-if [ -f /var/run/puppet/pp.run ]; then
+if [ -f /var/run/pp.run ]; then
   echo "Still running; try again later" >&2
   exit 1
 fi
 
-touch /var/puppet/pp.lock
+touch /var/run/pp.lock
