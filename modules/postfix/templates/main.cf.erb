@@ -5,9 +5,9 @@ command_directory = /usr/local/sbin
 
 notify_classes = bounce, 2bounce, delay, policy, protocol, resource, software
 inet_interfaces = localhost
-mydestination = localhost <%= domain %> <%= fqdn %>
+mydestination = localhost <%= @domain %> <%= @fqdn %>
 mynetworks = localhost
-relayhost = <%= relay %>
+relayhost = <%= @relay %>
 
 luser_relay = root
 alias_maps = hash:/usr/local/etc/postfix/aliases

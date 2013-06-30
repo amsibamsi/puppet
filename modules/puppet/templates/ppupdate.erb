@@ -4,9 +4,9 @@
 
 export GIT_SSH=ppssh
 
-cd "<%= home %>"
+cd "<%= @home %>"
 if [ ! -d repo ]; then
-  git clone -nq "<%= repo %>" repo || exit 1
+  git clone -nq "<%= @repo %>" repo || exit 1
 fi
 
 cd repo

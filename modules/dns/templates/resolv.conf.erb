@@ -1,7 +1,7 @@
 # Managed by Puppet
 
-domain <%= domain %>
-<% if !search_path.empty? %>search <%= search_path.join(" ") %>
+domain <%= @domain %>
+<% if !@search_path.empty? %>search <%= @search_path.join(" ") %>
 <% end -%>
-<% servers.each do |s| %>nameserver <%= s %>
+<% @servers.each do |s| %>nameserver <%= s %>
 <% end -%>

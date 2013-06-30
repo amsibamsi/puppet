@@ -4,6 +4,6 @@ driftfile /var/db/ntp.drift
 restrict default kod notrap nomodify nopeer noquery
 restrict localhost kod notrap nomodify nopeer
 
-<% servers.each do |s| -%>
+<% @servers.each do |s| -%>
 server <%= s %> iburst
 <% end -%>

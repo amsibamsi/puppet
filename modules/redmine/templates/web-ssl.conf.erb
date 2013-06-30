@@ -1,4 +1,4 @@
-$HTTP["host"] =~ "<%= host %>" {
+$HTTP["host"] =~ "<%= @host %>" {
   server.document-root = var.root + "redmine/public"
   server.error-handler-404 = "redmine.fcgi"
   index-file.names = ( "redmine.fcgi" )
