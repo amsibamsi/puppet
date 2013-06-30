@@ -2,7 +2,7 @@ class redmine($host) {
 
   include lighttpd
 
-  package { ["redmine", "rubygem-sqlite3", "ruby18-fcgi", "rubygem-rdoc"]: }
+  package { "redmine": }
 
   exec {
     "redmine":
