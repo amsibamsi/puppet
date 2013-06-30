@@ -4,9 +4,9 @@ Puppet::Type.type(:service).provide :freebsd2, :parent => :init do
 
   confine :operatingsystem => [:freebsd]
 
-  @@rcconf = '/etc/rc.conf'
-  @@rcconf_local = '/etc/rc.conf.local'
-  @@rcconf_dir = '/etc/rc.conf.d'
+  RCCONF = '/etc/rc.conf'
+  RCCONF_LOCAL = '/etc/rc.conf.local'
+  RCCONF_DIR = '/etc/rc.conf.d'
 
   def self.defpath
     superclass.defpath
@@ -65,7 +65,7 @@ Puppet::Type.type(:service).provide :freebsd2, :parent => :init do
   def rc_replace(service, rcvar, yesno)
     success = false
     # Replace in all files, not just in the first found with a match
-    [@@rcconf, @@rcconf_local, @@rcconf_dir + "/#{service}"].each do |filename|
+    [RCCONF, RCCONF_LOCAL, RCCONF_DIR + "/#{service}"].each do |filename|
       if File.exists?(filename)
         s = File.read(filename)
         if s.gsub!(/(#{rcvar}_enable)=\"?(YES|NO)\"?/, "\\1=\"#{yesno}\"")
@@ -82,21 +82,21 @@ Puppet::Type.type(:service).provide :freebsd2, :parent => :init do
   def rc_add(service, rcvar, yesno)
     append = "\n\# Added by Puppet\n#{rcvar}_enable=\"#{yesno}\""
     # First, try the one-file-per-service style
-    if File.exists?(@@rcconf_dir)
-      File.open(@@rcconf_dir + "/#{service}", File::WRONLY | File::APPEND | File::CREAT, 0644) {
+    if File.exists?(RCCONF_DIR)
+      File.open(RCCONF_DIR + "/#{service}", File::WRONLY | File::APPEND | File::CREAT, 0644) {
         |f| f << append
         self.debug("Appended to #{f.path}")
       }
     else
       # Else, check the local rc file first, but don't create it
-      if File.exists?(@@rcconf_local)
-        File.open(@@rcconf_local, File::WRONLY | File::APPEND) {
+      if File.exists?(RCCONF_LOCAL)
+        File.open(RCCONF_LOCAL, File::WRONLY | File::APPEND) {
           |f| f << append
           self.debug("Appended to #{f.path}")
         }
       else
         # At last use the standard rc.conf file
-        File.open(@@rcconf, File::WRONLY | File::APPEND | File::CREAT, 0644) {
+        File.open(RCCONF, File::WRONLY | File::APPEND | File::CREAT, 0644) {
           |f| f << append
           self.debug("Appended to #{f.path}")
         }
