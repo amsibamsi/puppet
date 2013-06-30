@@ -2,4 +2,4 @@
 
 production:
   adapter: sqlite3
-  dbfile: /var/db/redmine/sqlite.db
+  database: /var/db/redmine/sqlite.db
