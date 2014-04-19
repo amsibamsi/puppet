@@ -2,7 +2,7 @@ class localtime($zone) {
 
   file {
     '/etc/localtime':
-      ensure => "/usr/share/zoneinfo/Europe/${zone}";
+      source => "/usr/share/zoneinfo/${zone}";
   }
 
 }
