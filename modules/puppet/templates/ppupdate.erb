@@ -11,7 +11,7 @@ fi
 
 cd repo
 git pull -q origin master:master || exit 1
-git tag | sort -n | tail -n 1 | xargs git checkout -q || exit 1
+git checkout -q master || exit 1
 git submodule -q init || exit 1
 git submodule -q update || exit 1
 
