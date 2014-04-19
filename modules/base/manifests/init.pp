@@ -1,23 +1,23 @@
 class base {
 
   file {
-    "/srv":
+    '/srv':
       ensure => directory;
-    "/etc/rc.conf.d":
+    '/etc/rc.conf.d':
       ensure => directory;
-    "/usr/local":
+    '/usr/local':
       ensure => directory;
-    "/usr/local/etc":
+    '/usr/local/etc':
       ensure => directory;
-    "/usr/local/etc/rc.d":
+    '/usr/local/etc/rc.d':
       ensure => directory;
-    "/usr/local/src":
+    '/usr/local/src':
       ensure => directory;
-    "/root":
+    '/root':
       ensure => directory,
-      owner => "root",
-      group => "wheel",
-      mode => "0700";
+      owner => 'root',
+      group => 'wheel',
+      mode => '0700';
   }
 
 }
