@@ -25,8 +25,8 @@ define users::user(
   file {
     "/usr/home/${name}":
       ensure => directory,
-      owner => $uid
-      group => $gid
+      owner => $uid,
+      group => $gid,
       mode => '0750';
   }
 
