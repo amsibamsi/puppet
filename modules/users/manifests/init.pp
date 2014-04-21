@@ -4,7 +4,7 @@ class users {
     '/usr/home':
       ensure => directory;
     '/home':
-      ensure => '/usr/home';
+      ensure => 'usr/home';
   }
 
 }
