@@ -2,6 +2,6 @@
 
 Defaults rootpw
 Defaults timestamp_timeout=10
-Defaults passprompt="%p's password:"
+Defaults passprompt="sudo: %p's password:"
 
 %wheel ALL = (root) ALL
