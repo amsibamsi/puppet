@@ -2,38 +2,38 @@ class openvpn {
 
   include cert
 
-  package { "openvpn": }
+  package { 'openvpn': }
 
   file {
-    "/usr/local/etc/openvpn":
+    '/usr/local/etc/openvpn':
       ensure => directory;
-    "/usr/local/etc/openvpn/openvpn.conf":
+    '/usr/local/etc/openvpn/openvpn.conf':
       content => template("site-openvpn/openvpn.conf/$hostname.erb"),
-      notify => Service["openvpn"];
+      notify => Service['openvpn'];
   }
 
   group {
-    "openvpn":
-      gid => "230";
+    'openvpn':
+      gid => '230';
   }
 
   user {
-    "openvpn":
-      uid => "230",
-      gid => "230",
-      comment => "OpenVPN daemon",
-      home => "/nonexistent",
-      shell => "/usr/sbin/nologin";
+    'openvpn':
+      uid => '230',
+      gid => '230',
+      comment => 'OpenVPN daemon',
+      home => '/nonexistent',
+      shell => '/usr/sbin/nologin';
   }
 
   service {
-    "openvpn":
+    'openvpn':
       ensure => running,
       enable => true,
       require => [
-        Package["openvpn"],
-        User["openvpn"],
-        File["/usr/local/etc/openvpn/openvpn.conf"],
+        Package['openvpn'],
+        User['openvpn'],
+        File['/usr/local/etc/openvpn/openvpn.conf'],
       ];
   }
 

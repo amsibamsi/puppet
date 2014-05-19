@@ -1,10 +1,10 @@
 define concatfile::part(
-  $source = "",
-  $content = "",
-  $file = "",
-  $owner = "",
-  $group = "",
-  $mode = ""
+  $source = '',
+  $content = '',
+  $file = '',
+  $owner = '',
+  $group = '',
+  $mode = ''
 
 ) {
 
@@ -16,30 +16,30 @@ define concatfile::part(
       notify => Exec[$dir],
   }
 
-  if $owner != "" {
+  if $owner != '' {
     File[$name] { owner => $owner }
   }
-  if $group != "" {
+  if $group != '' {
     File[$name] { group => $group }
   }
-  if $mode != "" {
+  if $mode != '' {
     File[$name] { mode => $mode }
   }
 
   # This is why we should have an elsif ;-)
-  if ($source != "" and $content == "" and $file == "") {
+  if ($source != '' and $content == '' and $file == '') {
     File[$name] { source => $source }
   } else {
-    if ($source == "" and $content != "" and $file == "") {
+    if ($source == '' and $content != '' and $file == '') {
       File[$name] { content => $content }
     } else {
-      if ($source == "" and $content == "" and $file != "") {
+      if ($source == '' and $content == '' and $file != '') {
         File[$name] { ensure => $file }
       } else {
-        if ($source == "" and $content == "" and $file == "") {
+        if ($source == '' and $content == '' and $file == '') {
           File[$name] { ensure => present }
         } else {
-          err "Only one of the parameters source, content, file can be specified."
+          err 'Only one of the parameters source, content, file can be specified.'
         }
       }
     }

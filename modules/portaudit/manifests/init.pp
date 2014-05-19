@@ -1,14 +1,14 @@
 class portaudit {
 
   package {
-    "portaudit":
+    'portaudit':
       ensure => installed;
   }
 
   cron::job {
-    "portaudit":
-      source => "puppet:///modules/portaudit/portaudit.cron",
-      period => "daily";
+    'portaudit':
+      source => 'puppet:///modules/portaudit/portaudit.cron',
+      period => 'daily';
   }
 
 }

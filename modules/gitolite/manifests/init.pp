@@ -33,7 +33,7 @@ class gitolite {
   ->
   exec {
     'gitolite_setup':
-      command => "su git /usr/local/bin/gl-setup /srv/git/.ssh/id_rsa.pub",
+      command => 'su git /usr/local/bin/gl-setup /srv/git/.ssh/id_rsa.pub',
       creates => '/srv/git/.gitolite';
   }
 

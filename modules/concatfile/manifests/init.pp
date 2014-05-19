@@ -1,17 +1,17 @@
 define concatfile(
   $dir,
-  $owner = "",
-  $group = "",
-  $mode = ""
+  $owner = '',
+  $group = '',
+  $mode = ''
 ) {
 
-  if $owner != "" {
+  if $owner != '' {
     File { owner => $owner }
   }
-  if $group != "" {
+  if $group != '' {
     File { group => $group }
   }
-  if $mode != "" {
+  if $mode != '' {
     File { mode => $mode }
   }
 

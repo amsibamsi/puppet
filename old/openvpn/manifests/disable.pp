@@ -1,26 +1,26 @@
 class openvpn::disable {
 
   file {
-    "/usr/local/etc/openvpn":
+    '/usr/local/etc/openvpn':
       ensure => absent,
       force => true;
-    "/etc/rc.conf.d/openvpn":
+    '/etc/rc.conf.d/openvpn':
       ensure => absent,
       force => true;
   }
 
   group {
-    "openvpn":
+    'openvpn':
       ensure => absent;
   }
 
   user {
-    "openvpn":
+    'openvpn':
       ensure => absent;
   }
 
   service {
-    "openvpn":
+    'openvpn':
       ensure => stopped;
   }
 

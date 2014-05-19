@@ -1,7 +1,7 @@
 define sysctl::config(
-  $content = "",
-  $source = "",
-  $order = "50"
+  $content = '',
+  $source = '',
+  $order = '50'
 ) {
 
   concatfile::part {

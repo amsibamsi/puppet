@@ -1,7 +1,7 @@
 class daapd::disable {
 
   package {
-    "mt-daapd":
+    'mt-daapd':
       ensure => absent;
   }
 
@@ -11,17 +11,17 @@ class daapd::disable {
   }
 
   file { [
-    "/usr/local/etc/mt-daapd.conf",
-    "/etc/rc.conf.d/mtdaapd",
+    '/usr/local/etc/mt-daapd.conf',
+    '/etc/rc.conf.d/mtdaapd',
   ]: }
 
   file {
-    "/var/db/mt-daapd":
+    '/var/db/mt-daapd':
       backup => false;
   }
 
   service {
-    "mt-daapd":
+    'mt-daapd':
       ensure => stopped;
   }
 

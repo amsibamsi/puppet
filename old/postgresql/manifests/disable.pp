@@ -1,28 +1,28 @@
 class postgresql::disable {
 
   file {
-    "/usr/local/pgsql":
+    '/usr/local/pgsql':
       ensure => absent,
       force => true;
   }
 
   service {
-    "postgresql":
+    'postgresql':
       ensure => stopped;
   }
 
   package {
-    "postgresql-server":
+    'postgresql-server':
       ensure => absent;
   }
 
   group {
-    "pgsql":
+    'pgsql':
       ensure => absent;
   }
 
   user {
-    "pgsql":
+    'pgsql':
       ensure => absent;
   }
 

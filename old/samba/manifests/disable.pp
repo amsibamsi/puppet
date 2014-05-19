@@ -1,7 +1,7 @@
 class samba::disable {
 
   package {
-    "samba34":
+    'samba34':
       ensure => absent;  
   }
 
@@ -11,34 +11,34 @@ class samba::disable {
   }
 
   file { [
-    "/usr/local/etc/smb.conf",
-    "/usr/local/etc/samba",
-    "/etc/rc.conf.d/samba",
+    '/usr/local/etc/smb.conf',
+    '/usr/local/etc/samba',
+    '/etc/rc.conf.d/samba',
   ]: }
 
   file {
-    "/var/db/samba34":
+    '/var/db/samba34':
       backup => false;
-    "/var/log/samba34":
+    '/var/log/samba34':
       backup => false;
   }
 
   group {
-    "smbusers":
+    'smbusers':
       ensure => absent;
   }
 
   user { 
-    "smbuser":
+    'smbuser':
       ensure => absent;
-    "smbguest":
+    'smbguest':
       ensure => absent;
-    "smbadmin":
+    'smbadmin':
       ensure => absent;
   }
 
   service {
-    "samba":
+    'samba':
       ensure => stopped;
   }
 
