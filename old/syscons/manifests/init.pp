@@ -5,8 +5,8 @@ class syscons($keymap = 'us.iso') {
 
   if $keymap == 'us.iso.pwdn' {
     file {
-      "/usr/share/syscons/keymaps/$keymap.kbd":
-       source => "puppet:///modules/syscons/$keymap.kbd",
+      "/usr/share/syscons/keymaps/${keymap}.kbd":
+       source => "puppet:///modules/syscons/${keymap}.kbd",
        before => File['/etc/rc.conf.d/syscons'];
     }
   }

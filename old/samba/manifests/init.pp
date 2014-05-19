@@ -5,14 +5,14 @@ class samba {
   file {
     '/usr/local/etc/smb.conf':
       source => [
-        "puppet:///modules/site-samba/smb.conf/$hostname"
+        "puppet:///modules/site-samba/smb.conf/${hostname}"
       ],
       notify => Service['samba'];
     '/usr/local/etc/samba':
       ensure => directory;
     '/usr/local/etc/samba/smbusers':
       source => [
-        "puppet:///modules/site-samba/smbusers/$hostname",
+        "puppet:///modules/site-samba/smbusers/${hostname}",
         'puppet:///modules/base/comment'
       ],
       require => Package['samba34'],

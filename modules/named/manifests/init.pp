@@ -2,8 +2,8 @@ class named($zones = '') {
 
   define zone_file() {
     file {
-      "/etc/namedb/master/$name.db":
-        source => "puppet:///modules/site-named/zones/$name.db",
+      "/etc/namedb/master/${name}.db":
+        source => "puppet:///modules/site-named/zones/${name}.db",
         notify => Service['named'];
     }
   }
@@ -20,7 +20,7 @@ class named($zones = '') {
       notify => Service['named'],
       require => File['/etc/rc.conf.d'];
     '/etc/namedb/named.conf':
-      source => "puppet:///modules/site-named/named.conf/$hostname",
+      source => "puppet:///modules/site-named/named.conf/${hostname}",
       notify => Service['named'];
     '/etc/namedb/rndc.key':
       ensure => present,

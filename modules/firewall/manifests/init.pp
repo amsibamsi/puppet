@@ -9,7 +9,7 @@ class firewall {
 
   file {
     '/etc/pf.conf':
-      source => "puppet:///modules/site-firewall/pf.conf/$hostname",
+      source => "puppet:///modules/site-firewall/pf.conf/${hostname}",
       notify => Service['pf'];
   }
 

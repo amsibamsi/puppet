@@ -12,7 +12,7 @@ class puppet(
       group => 'puppet',
       ensure => directory,
       mode => '0750';
-    "$home/key":
+    "${home}/key":
       source => 'puppet:///modules/site-puppet/key',
       owner => '0',
       group => '0',
@@ -20,7 +20,7 @@ class puppet(
     '/usr/local/sbin/ppssh':
       mode => '0755',
       content => template('puppet/ppssh.erb'),
-      require => File["$home/key"];
+      require => File["${home}/key"];
     '/usr/local/sbin/ppupdate':
       mode => '0755',
       content => template('puppet/ppupdate.erb'),

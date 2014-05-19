@@ -16,9 +16,9 @@ class syslog {
 
   define remove_logfile() {
     exec {
-      "log_clean_$name":
-        command => "rm /var/log/$name*",
-        onlyif => "ls /var/log/$name*",
+      "log_clean_${name}":
+        command => "rm /var/log/${name}*",
+        onlyif => "ls /var/log/${name}*",
         require => Exec['syslogd_stop'];
     }
   }

@@ -30,7 +30,7 @@ class backup::server {
       group => 'backup',
       mode => '0700';
     '/backup/hosts/.ssh/authorized_keys':
-      source => "puppet:///modules/site-backup/server/authorized_keys/$hostname",
+      source => "puppet:///modules/site-backup/server/authorized_keys/${hostname}",
       owner => 'backup',
       group => 'backup';
     '/backup/hosts/.ssh/wrapper':

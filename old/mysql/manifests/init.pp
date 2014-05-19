@@ -4,7 +4,7 @@ class mysql {
 
   file {
     '/var/db/mysql/my.cnf':
-      source => "puppet:///modules/site-mysql/my.cnf/$hostname",
+      source => "puppet:///modules/site-mysql/my.cnf/${hostname}",
       require => Package['mysql-server'];
     '/etc/rc.conf.d/mysql':
       source => 'puppet:///modules/mysql/mysql.rc.conf';

@@ -7,7 +7,7 @@ class backup::client(
       ensure => directory,
       mode => '0750';
     '/usr/local/etc/backup/conf':
-      source => "puppet:///modules/site-backup/client/conf/$hostname";
+      source => "puppet:///modules/site-backup/client/conf/${hostname}";
     '/usr/local/sbin/backup':
       source => 'puppet:///modules/backup/client/backup',
       mode => '0755',
@@ -42,7 +42,7 @@ class backup::client(
   if $backup_remote {
    exec {
      'sshkey_backup':
-       command => "ssh-keygen -b 4096 -t rsa -N '' -C 'backup@$hostname' -f /usr/local/etc/backup/key",
+       command => "ssh-keygen -b 4096 -t rsa -N '' -C 'backup@${hostname}' -f /usr/local/etc/backup/key",
        creates => '/usr/local/etc/backup/key',
        require => File['/usr/local/etc/backup'];
     }

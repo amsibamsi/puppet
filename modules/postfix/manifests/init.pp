@@ -19,27 +19,27 @@ class postfix($relay) {
   exec {
     'postfix_aliases':
       command => '/usr/local/bin/newaliases',
-      creates => "$etc_postfix/aliases.db",
+      creates => "${etc_postfix}/aliases.db",
       notify => Service['postfix'],
       require => [
         Package['postfix'],
-        File["$etc_postfix/aliases"]
+        File["${etc_postfix}/aliases"]
       ];
     'postfix_virtuals':
-      command => "/usr/local/sbin/postmap $etc_postfix/virtuals",
-      creates => "$etc_postfix/virtuals.db",
+      command => "/usr/local/sbin/postmap ${etc_postfix}/virtuals",
+      creates => "${etc_postfix}/virtuals.db",
       notify => Service['postfix'],
       require => [
         Package['postfix'],
-        File["$etc_postfix/virtuals"]
+        File["${etc_postfix}/virtuals"]
       ];
     'postfix_sasl':
-      command => "/usr/local/sbin/postmap $etc_postfix/sasl",
-      creates => "$etc_postfix/sasl.db",
+      command => "/usr/local/sbin/postmap ${etc_postfix}/sasl",
+      creates => "${etc_postfix}/sasl.db",
       notify => Service['postfix'],
       require => [
         Package['postfix'],
-        File["$etc_postfix/sasl"]
+        File["${etc_postfix}/sasl"]
       ];
     'sendmail_clean':
       command => '/bin/rm -f /var/log/sendmail*',
@@ -50,16 +50,16 @@ class postfix($relay) {
   file {
     $etc_postfix:
       ensure => directory;
-    "$etc_postfix/main.cf":
+    "${etc_postfix}/main.cf":
       content => template('postfix/main.cf.erb'),
       notify => Service['postfix'];
-    "$etc_postfix/aliases":
+    "${etc_postfix}/aliases":
       source => 'puppet:///modules/site-postfix/aliases',
       notify => Exec['postfix_aliases'];
-    "$etc_postfix/virtuals":
+    "${etc_postfix}/virtuals":
       content => template('postfix/virtuals.erb'),
       notify => Exec['postfix_virtuals'];
-    "$etc_postfix/sasl":
+    "${etc_postfix}/sasl":
       owner => 'root',
       group => 'wheel',
       mode => '0600',

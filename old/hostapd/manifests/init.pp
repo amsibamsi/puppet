@@ -8,7 +8,7 @@ class hostapd {
 
   file {
     '/etc/hostapd.conf':
-      source => "puppet:///modules/site-hostapd/hostapd.conf/$hostname",
+      source => "puppet:///modules/site-hostapd/hostapd.conf/${hostname}",
       notify => Service['hostapd'];
     '/etc/hostapd.psk':
       ensure => present,

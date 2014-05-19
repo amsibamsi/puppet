@@ -5,7 +5,7 @@ define rclocal::config(
 ) {
 
   concatfile::part {
-    "/etc/rc.local.d/$order.$name":
+    "/etc/rc.local.d/${order}.${name}":
       content => $content,
       source => $source;
   }

@@ -30,7 +30,7 @@ define concatfile(
 
   exec {
     $dir:
-      command => "find $dir -maxdepth 1 \\( -type f -or -type l \\) -print0 | sort -nz | xargs -0 cat > $name",
+      command => "find ${dir} -maxdepth 1 \\( -type f -or -type l \\) -print0 | sort -nz | xargs -0 cat > ${name}",
       refreshonly => true;
   }
 

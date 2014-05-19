@@ -5,7 +5,7 @@ define sysctl::config(
 ) {
 
   concatfile::part {
-    "/etc/sysctl.conf.d/$order.$name":
+    "/etc/sysctl.conf.d/${order}.${name}":
       content => $content,
       source => $source;
   }

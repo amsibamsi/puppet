@@ -8,7 +8,7 @@ class openvpn {
     '/usr/local/etc/openvpn':
       ensure => directory;
     '/usr/local/etc/openvpn/openvpn.conf':
-      content => template("site-openvpn/openvpn.conf/$hostname.erb"),
+      content => template("site-openvpn/openvpn.conf/${hostname}.erb"),
       notify => Service['openvpn'];
   }
 

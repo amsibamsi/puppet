@@ -5,11 +5,11 @@ define cron::job(
   $order = '500'
 ) {
 
-  $file = "/usr/local/etc/periodic/$period/$order.$name"
+  $file = "/usr/local/etc/periodic/${period}/${order}.${name}"
 
   File {
     mode => '0755',
-    require => File["/usr/local/etc/periodic/$period"],
+    require => File["/usr/local/etc/periodic/${period}"],
   }
 
   if $source == '' {

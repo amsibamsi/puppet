@@ -12,7 +12,7 @@ class swapfile($size = '512mb') {
 
   exec {
     'swapfile':
-      command => "/bin/dd if=/dev/zero of=/usr/swap bs=$size count=1",
+      command => "/bin/dd if=/dev/zero of=/usr/swap bs=${size} count=1",
       creates => '/usr/swap',
       before => File['/usr/swap'];
   }
