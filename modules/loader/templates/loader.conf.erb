@@ -1,0 +1,12 @@
+# Managed by Puppet
+
+autoboot_delay="3"
+<% if @serial -%>
+
+console="comconsole"
+comconsole_speed="115200"
+<% end -%>
+<% if @zfs -%>
+
+zfs_load="YES"
+<% end -%>

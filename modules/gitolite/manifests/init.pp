@@ -1,6 +1,6 @@
 class gitolite {
 
-  require dirs::srv
+  require dir::srv
 
   group {
     'git':

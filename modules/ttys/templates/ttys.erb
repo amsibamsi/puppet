@@ -1,0 +1,18 @@
+# Managed by Puppet
+
+console none unknown off secure
+<% if @vga -%>
+
+ttyv0 "/usr/libexec/getty Pc" xterm on secure
+ttyv1 "/usr/libexec/getty Pc" xterm on secure
+ttyv2 "/usr/libexec/getty Pc" xterm on secure
+ttyv3 "/usr/libexec/getty Pc" xterm on secure
+ttyv4 "/usr/libexec/getty Pc" xterm on secure
+ttyv5 "/usr/libexec/getty Pc" xterm on secure
+ttyv6 "/usr/libexec/getty Pc" xterm on secure
+ttyv7 "/usr/libexec/getty Pc" xterm on secure
+<% end -%>
+<% if @serial -%>
+
+ttyu0 "/usr/libexec/getty std.115200" vt100 on secure
+<% end -%>

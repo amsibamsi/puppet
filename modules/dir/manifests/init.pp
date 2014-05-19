@@ -1,18 +1,18 @@
-class dirs::srv {
+class dir::srv {
   file {
     '/srv':
       ensure => directory;
   }
 }
 
-class dirs::rcconfd {
+class dir::rcconfd {
   file {
     '/etc/rc.conf.d':
       ensure => directory;
   }
 }
 
-class dirs::local {
+class dir::local {
   file {
     '/usr/local':
       ensure => directory;
@@ -25,7 +25,7 @@ class dirs::local {
   }
 }
 
-class dirs::root {
+class dir::root {
   file {
     '/root':
       ensure => directory,

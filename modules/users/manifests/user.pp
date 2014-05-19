@@ -30,6 +30,6 @@ define users::user(
       mode => '0750';
   }
 
-  pkg::install { 'zsh': }
+  package::install { 'zsh': }
 
 }

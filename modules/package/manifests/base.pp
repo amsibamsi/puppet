@@ -9,7 +9,6 @@ class package::base {
       "pkg_search",
       "bsdadminscripts",
       "rsync",
-      "zsh",
       "tmux",
       "vim-lite" ]:
   }

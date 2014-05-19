@@ -1,25 +1,14 @@
-class ttys($vga = true) {
+class ttys(
+  $vga,
+  $serial
+) {
 
-  concatfile {
-    "/etc/ttys":
-      dir => "/etc/ttys.d";
-  }
-
-  ttys::config {
-    "comment":
-      source => "puppet:///modules/base/comment",
-      order => "00";
-    "default":
-      source => "puppet:///modules/ttys/default",
-      order => "01";
-  }
-
-  if $vga == true {
-    ttys::config {
-      "vga":
-        source => "puppet:///modules/ttys/vga",
-        order => "99";
-    }
+  file {
+    '/etc/ttys':
+      content => template('ttys/ttys.erb'),
+      owner   => 'root',
+      group   => 'wheel',
+      mode    => '0644';
   }
 
 }

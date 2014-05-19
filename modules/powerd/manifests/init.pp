@@ -1,6 +1,6 @@
 class powerd {
 
-  require dirs::rcconfd
+  require dir::rcconfd
 
   file {
     "/etc/rc.conf.d/powerd":

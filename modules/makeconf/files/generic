@@ -1,4 +1,0 @@
-
-# Custom Kernel
-KERNCONF="CUSTOM"
-KODIR="/boot/kernel-custom"
