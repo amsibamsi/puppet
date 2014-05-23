@@ -1,8 +1,14 @@
-class postfix($relay) {
+class postfix(
+  $relay,
+  $root_forward = '',
+) {
 
   $etc_postfix = '/usr/local/etc/postfix'
+  $sasl_pwd_map = "${etc_postfix}/sasl"
 
-  package { 'postfix': }
+  package::install {
+    'postfix':
+  }
 
   service {
     'postfix':
@@ -10,7 +16,7 @@ class postfix($relay) {
       enable => true,
       require => [
         Service['sendmail'],
-        Package['postfix']
+        Package::Install['postfix']
       ];
     'sendmail':
       ensure => stopped;
@@ -22,7 +28,7 @@ class postfix($relay) {
       creates => "${etc_postfix}/aliases.db",
       notify => Service['postfix'],
       require => [
-        Package['postfix'],
+        Package::Install['postfix'],
         File["${etc_postfix}/aliases"]
       ];
     'postfix_virtuals':
@@ -30,7 +36,7 @@ class postfix($relay) {
       creates => "${etc_postfix}/virtuals.db",
       notify => Service['postfix'],
       require => [
-        Package['postfix'],
+        Package::Install['postfix'],
         File["${etc_postfix}/virtuals"]
       ];
     'postfix_sasl':
@@ -38,13 +44,15 @@ class postfix($relay) {
       creates => "${etc_postfix}/sasl.db",
       notify => Service['postfix'],
       require => [
-        Package['postfix'],
+        Package::Install['postfix'],
         File["${etc_postfix}/sasl"]
       ];
     'sendmail_clean':
       command => '/bin/rm -f /var/log/sendmail*',
       onlyif => '/bin/ls /var/log/sendmail*',
       require => Service['sendmail'];
+    'postfix_checkpwd':
+      command => "/usr/bin/grep \* ${etc_postfix}/sasl";
   }
 
   file {
@@ -54,7 +62,7 @@ class postfix($relay) {
       content => template('postfix/main.cf.erb'),
       notify => Service['postfix'];
     "${etc_postfix}/aliases":
-      source => 'puppet:///modules/site-postfix/aliases',
+      source => 'puppet:///modules/site_postfix/aliases',
       notify => Exec['postfix_aliases'];
     "${etc_postfix}/virtuals":
       content => template('postfix/virtuals.erb'),
@@ -69,6 +77,13 @@ class postfix($relay) {
       before => Service['sendmail'];
     '/etc/mail/mailer.conf':
       source => 'puppet:///modules/postfix/mailer.conf';
+  }
+
+  unless $root_forward == '' {
+    file {
+      '/root/.forward':
+        content => $root_forward;
+    }
   }
 
   cron::job {

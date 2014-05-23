@@ -9,13 +9,13 @@ define ssh::userkey(
       group   => $name,
       mode    => '0700',
       before  => Exec["ssh_userkey_${name}"];
-    "/${home}/.ssh/id_rsa":
+    "${home}/.ssh/id_rsa":
       ensure   => present,
       owner    => $name,
       group    => $name,
       mode     => '0600',
       require  => Exec["ssh_userkey_${name}"];
-    "/${home}/.ssh/id_rsa.pub":
+    "${home}/.ssh/id_rsa.pub":
       ensure   => present,
       owner    => $name,
       group    => $name,

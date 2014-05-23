@@ -1,8 +1,7 @@
 class portaudit {
 
-  package {
+  package::install {
     'portaudit':
-      ensure => installed;
   }
 
   cron::job {

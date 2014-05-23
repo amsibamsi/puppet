@@ -13,7 +13,7 @@ class puppet(
       ensure => directory,
       mode => '0750';
     "${home}/key":
-      source => 'puppet:///modules/site-puppet/key',
+      source => 'puppet:///modules/site_puppet/key',
       owner => '0',
       group => '0',
       mode => '0400';

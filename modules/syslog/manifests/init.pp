@@ -1,6 +1,8 @@
 class syslog {
 
-  package { 'rsyslog': }
+  package::install {
+    'rsyslog':
+  }
 
   service {
     'rsyslogd':
