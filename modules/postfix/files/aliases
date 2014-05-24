@@ -1,0 +1,4 @@
+# Managed by Puppet
+
+MAILER-DAEMON: postmaster
+postmaster: root

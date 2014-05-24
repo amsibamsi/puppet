@@ -4,7 +4,6 @@ class postfix(
 ) {
 
   $etc_postfix = '/usr/local/etc/postfix'
-  $sasl_pwd_map = "${etc_postfix}/sasl"
 
   package::install {
     'postfix':
@@ -62,16 +61,18 @@ class postfix(
       content => template('postfix/main.cf.erb'),
       notify => Service['postfix'];
     "${etc_postfix}/aliases":
-      source => 'puppet:///modules/site_postfix/aliases',
+      source => 'puppet:///modules/postfix/aliases',
       notify => Exec['postfix_aliases'];
     "${etc_postfix}/virtuals":
       content => template('postfix/virtuals.erb'),
       notify => Exec['postfix_virtuals'];
     "${etc_postfix}/sasl":
-      owner => 'root',
-      group => 'wheel',
-      mode => '0600',
-      notify => Exec['postfix_sasl'];
+      source  => 'puppet:///modules/postfix/sasl.template',
+      owner   => 'root',
+      group   => 'wheel',
+      mode    => '0600',
+      replace => false
+      notify  => Exec['postfix_sasl'];
     '/etc/rc.conf.d/sendmail':
       source => 'puppet:///modules/postfix/sendmail.rc.conf',
       before => Service['sendmail'];
