@@ -51,7 +51,7 @@ class postfix(
       onlyif => '/bin/ls /var/log/sendmail*',
       require => Service['sendmail'];
     'postfix_checkpwd':
-      command => "/usr/bin/grep \* ${etc_postfix}/sasl";
+      command => "/usr/bin/grep -F '${relay}' ${etc_postfix}/sasl";
   }
 
   file {
@@ -71,7 +71,7 @@ class postfix(
       owner   => 'root',
       group   => 'wheel',
       mode    => '0600',
-      replace => false
+      replace => false,
       notify  => Exec['postfix_sasl'];
     '/etc/rc.conf.d/sendmail':
       source => 'puppet:///modules/postfix/sendmail.rc.conf',
