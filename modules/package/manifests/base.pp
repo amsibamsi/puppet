@@ -1,5 +1,7 @@
 class package::base {
 
+  include package::git
+
   package::install {
     ['wget',
      'lynx',
@@ -10,8 +12,7 @@ class package::base {
      'bsdadminscripts',
      'rsync',
      'tmux',
-     'vim-lite',
-     'git']:
+     'vim-lite']:
   }
 
 }

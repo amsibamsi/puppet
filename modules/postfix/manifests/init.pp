@@ -1,6 +1,6 @@
 class postfix(
   $relay,
-  $root_forward = '',
+  $forward = '',
 ) {
 
   $etc_postfix = '/usr/local/etc/postfix'
@@ -22,21 +22,13 @@ class postfix(
   }
 
   exec {
-    'postfix_aliases':
-      command => '/usr/local/bin/newaliases',
-      creates => "${etc_postfix}/aliases.db",
-      notify => Service['postfix'],
-      require => [
-        Package::Install['postfix'],
-        File["${etc_postfix}/aliases"]
-      ];
     'postfix_virtuals':
-      command => "/usr/local/sbin/postmap ${etc_postfix}/virtuals",
-      creates => "${etc_postfix}/virtuals.db",
+      command => "/usr/local/sbin/postmap ${etc_postfix}/virtuals-regexp",
+      creates => "${etc_postfix}/virtuals-regexp.db",
       notify => Service['postfix'],
       require => [
         Package::Install['postfix'],
-        File["${etc_postfix}/virtuals"]
+        File["${etc_postfix}/virtuals-regexp"]
       ];
     'postfix_sasl':
       command => "/usr/local/sbin/postmap ${etc_postfix}/sasl",
@@ -60,11 +52,8 @@ class postfix(
     "${etc_postfix}/main.cf":
       content => template('postfix/main.cf.erb'),
       notify => Service['postfix'];
-    "${etc_postfix}/aliases":
-      source => 'puppet:///modules/postfix/aliases',
-      notify => Exec['postfix_aliases'];
-    "${etc_postfix}/virtuals":
-      content => template('postfix/virtuals.erb'),
+    "${etc_postfix}/virtuals-regexp":
+      content => template('postfix/virtuals-regexp.erb'),
       notify => Exec['postfix_virtuals'];
     "${etc_postfix}/sasl":
       source  => 'puppet:///modules/postfix/sasl.template',
@@ -78,13 +67,6 @@ class postfix(
       before => Service['sendmail'];
     '/etc/mail/mailer.conf':
       source => 'puppet:///modules/postfix/mailer.conf';
-  }
-
-  unless $root_forward == '' {
-    file {
-      '/root/.forward':
-        content => $root_forward;
-    }
   }
 
   cron::job {

@@ -8,7 +8,7 @@ class syslog {
     'rsyslogd':
       ensure => running,
       require => [
-        Package['rsyslog'],
+        Package::Install['rsyslog'],
         File['/usr/local/etc/rsyslog.conf'],
         File['/etc/rc.conf.d/rsyslogd'],
         Exec['syslogd_stop'],

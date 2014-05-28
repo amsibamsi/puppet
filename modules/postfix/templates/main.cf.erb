@@ -5,14 +5,12 @@ command_directory = /usr/local/sbin
 
 notify_classes = bounce, 2bounce, delay, policy, protocol, resource, software
 inet_interfaces = localhost
-mydestination = localhost <%= @domain %> <%= @fqdn %>
+mydestination = localhost localdomain <%= @domain %> <%= @fqdn %>
 mynetworks = localhost
 relayhost = <%= @relay %>
 
 luser_relay = root
-alias_maps = hash:/usr/local/etc/postfix/aliases
-alias_database = hash:/usr/local/etc/postfix/aliases
-virtual_alias_maps = hash:/usr/local/etc/postfix/virtuals
+virtual_alias_maps = regexp:/usr/local/etc/postfix/virtuals-regexp
 
 smtp_use_tls = yes
 smtp_tls_CAfile = /usr/local/share/certs/ca-root-nss.crt

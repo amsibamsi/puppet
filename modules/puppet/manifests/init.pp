@@ -3,7 +3,7 @@ class puppet(
   $repo
 ) {
 
-  include git
+  require package::git
 
   file {
     '/usr/local/etc/puppet/puppet.conf':
@@ -24,10 +24,7 @@ class puppet(
     '/usr/local/sbin/ppupdate':
       mode => '0755',
       content => template('puppet/ppupdate.erb'),
-      require => [
-        Package['git'],
-        File['/usr/local/sbin/ppssh']
-      ];
+      require => File['/usr/local/sbin/ppssh'];
     '/usr/local/sbin/pprun':
       mode => '0755',
       content => template('puppet/pprun.erb');

@@ -4,6 +4,6 @@
 
 echo
 echo "Checking packages for vulnerabilities:"
-out=$(portaudit -Faq | tee /dev/stderr | wc -l)
+out=$(pkg audit -Fq | tee /dev/stderr | wc -l)
 [ "$out" -gt 0 ] && exit 1
 exit 0

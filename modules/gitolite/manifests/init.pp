@@ -24,7 +24,9 @@ class gitolite {
       mode => '0750';
   }
   ->
-  pkg::install { 'gitolite2': }
+  package::install {
+    'gitolite2':
+  }
   ->
   ssh::userkey {
     'git':
