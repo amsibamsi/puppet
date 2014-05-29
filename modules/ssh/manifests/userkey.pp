@@ -1,32 +1,34 @@
 define ssh::userkey(
-  $home
+  $home = '',
+  $group = ''
 ) {
 
-  file {
-    "${home}/.ssh":
-      ensure  => directory,
-      owner   => $name,
-      group   => $name,
-      mode    => '0700',
-      before  => Exec["ssh_userkey_${name}"];
-    "${home}/.ssh/id_rsa":
-      ensure   => present,
-      owner    => $name,
-      group    => $name,
-      mode     => '0600',
-      require  => Exec["ssh_userkey_${name}"];
-    "${home}/.ssh/id_rsa.pub":
-      ensure   => present,
-      owner    => $name,
-      group    => $name,
-      mode     => '0600',
-      require  => Exec["ssh_userkey_${name}"];
+  if $home == '' {
+    $real_home = "/home/${name}"
+  } else {
+    $real_home = $home
   }
 
-  exec {
-    "ssh_userkey_${name}":
-      command => "ssh-keygen -t rsa -b 4096 -N '' -f ${home}/.ssh/id_rsa",
-      creates => "${home}/.ssh/id_rsa";
+  if $group == '' {
+    $real_group = $name
+  } else {
+    $real_group = $group
+  }
+
+  file {
+    "${real_home}/.ssh":
+      ensure => directory,
+      owner  => $name,
+      group  => $real_group,
+      mode   => '0700',
+      before => Ssh::Key["user_${name}"];
+  }
+
+  ssh::key {
+    "user_${name}":
+      username => $name,
+      group    => $real_group,
+      dir      => "${real_home}/.ssh";
   }
 
 }

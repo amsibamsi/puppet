@@ -8,15 +8,10 @@ class puppet(
   file {
     '/usr/local/etc/puppet/puppet.conf':
       content => template('puppet/puppet.conf.erb');
-    $home:
+    ${home}:
       group => 'puppet',
       ensure => directory,
       mode => '0750';
-    "${home}/key":
-      source => 'puppet:///modules/site_puppet/key',
-      owner => '0',
-      group => '0',
-      mode => '0400';
     '/usr/local/sbin/ppssh':
       mode => '0755',
       content => template('puppet/ppssh.erb'),
@@ -37,6 +32,14 @@ class puppet(
     '/usr/local/sbin/ppstat':
       mode => '0755',
       source => 'puppet:///modules/puppet/ppstat';
+  }
+
+  ssh::key {
+    'puppet':
+      username => 'root',
+      group    => 'wheel',
+      dir      => $home,
+      file     => 'key';
   }
 
   cron::job {
