@@ -12,9 +12,9 @@ define ssh::key(
   }
 
   if $file == '' {
-    $real_file = 'id_rsa'
+    $real_file = "${dir}/id_rsa"
   } else {
-    $real_file = $file
+    $real_file = "${dir}/${file}"
   }
 
   exec {

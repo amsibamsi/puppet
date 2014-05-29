@@ -8,7 +8,7 @@ class puppet(
   file {
     '/usr/local/etc/puppet/puppet.conf':
       content => template('puppet/puppet.conf.erb');
-    ${home}:
+    "$home":
       group => 'puppet',
       ensure => directory,
       mode => '0750';
