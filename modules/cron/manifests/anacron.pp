@@ -1,12 +1,14 @@
 class cron::anacron inherits cron::periodic {
 
-  package { 'anacron': }
+  package::install {
+    'anacron':
+  }
 
   service {
     'anacron':
       # will be started by cron repeatedly
       enable => false,
-      require => Package['anacron'];
+      require => Package::Install['anacron'];
   }
 
   file { '/usr/local/etc/anacrontab':
